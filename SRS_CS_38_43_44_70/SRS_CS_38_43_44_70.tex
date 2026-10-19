@@ -1,0 +1,2503 @@
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+\fi
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+\begin{titlepage}
+    \centering
+
+    \vspace*{1cm}
+
+    {\Large\textbf{NED UNIVERSITY OF ENGINEERING AND TECHNOLOGY}\par}
+
+    \vspace{0.3cm}
+
+    {\large Department of Computer and Information Systems Engineering\par}
+
+    \vspace{1.5cm}
+
+    % Uncomment the following lines if you have the university logo
+    % \includegraphics[width=0.22\textwidth]{NED_Logo.png}
+    % \vspace{1cm}
+
+    {\Large\textbf{SOFTWARE REQUIREMENTS SPECIFICATION}\par}
+
+    \vspace{1cm}
+
+    {\LARGE\textbf{Computer Vision and AI-Based\\
+    Construction Site Monitoring via Satellite Imagery}\par}
+
+    \vspace{1cm}
+
+    {\large\textbf{Submitted By}\par}
+
+    \vspace{0.4cm}
+
+    {\large 1. Member Name: Usman Rasheed Siddiqui   Roll No.: CS-24038\par}
+    {\large 2. Member Name: Salman Raza   Roll No.: CS-24043\par}
+    {\large 3. Member Name: Ahsan Atif Rajput  Roll No.: CS-24044\par}
+    {\large 4. Member Name: Danish Farooqui   Roll No.: CS-24070\par}
+
+    \vspace{0.5cm}
+
+    {\large\textbf{Submitted To}\par}
+    Dr. Fakhra Aftab
+
+
+    \vfill
+
+    {\large\textbf{Department of Computer and Information Systems Engineering}\par}
+
+    \vspace{0.2cm}
+
+    {\large NED University of Engineering and Technology, Karachi\par}
+
+    \vspace{0.5cm}
+
+\end{titlepage}
+{
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+
+\vspace{5cm}
+\section{1. Introduction}\label{introduction}
+
+\subsection{1.1 Document Purpose}\label{document-purpose}
+
+This Software Requirements Specification (SRS) describes the functional
+and non-functional requirements for the Computer Vision and AI-Based
+Construction Site Monitoring via Satellite Imagery system. It defines
+the expected system behaviour, interfaces, data requirements,
+constraints, and interaction models to guide design, implementation, and
+verification.
+
+\subsection{1.2 Product Scope}\label{product-scope}
+
+The \textbf{Computer Vision and AI-Based Construction Site Monitoring
+via Satellite Imagery} system aims to monitor construction progress by
+detecting physical changes in construction sites using satellite
+imagery, computer vision, and artificial intelligence. The system will
+allow authorized users, including builders, owners, and site
+supervisors, to register construction sites by providing the site name,
+geographical coordinates, and construction start date. Using Google
+Earth Engine, the system will retrieve available Sentinel-2 satellite
+images for the selected location and date range, preprocess them, and
+compare images captured at different times to identify and highlight
+changed areas.
+
+The system will display detected changes, estimated changed areas, and
+AI-generated insights through a user-friendly dashboard. It will display
+the current detected changes for a selected monitoring check and allow
+users to generate and download reports. The project focuses on
+\textbf{site-level change detection and progress monitoring} and will
+not determine exact construction completion percentages, assess
+structural safety, or replace physical site inspections. Results will
+depend on image resolution, availability, cloud cover, and model
+accuracy.
+
+\subsection{1.3 Intended Audience and Document
+Overview}\label{intended-audience-and-document-overview}
+
+This document is intended for the project team, software and AI
+developers, reviewers, instructors, and other stakeholders who need to
+understand the system requirements. Chapter 1 introduces the project;
+Chapter 2 describes the product context and stakeholders; Chapter 3
+specifies interfaces, user and system functional requirements, and
+behavioural models; Chapter 4 defines non-functional requirements;
+Chapter 5 records any additional requirements; and the appendices
+describe the data dictionary and traceability information.
+
+\subsection{1.4 Definitions, Acronyms and
+Abbreviations}\label{definitions-acronyms-and-abbreviations}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Definition
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+AI & Artificial Intelligence \\
+CV & Computer Vision \\
+DFD & Data Flow Diagram \\
+FR & Functional Requirement \\
+GEE & Google Earth Engine \\
+IoU & Intersection over Union \\
+NFR & Non-Functional Requirement \\
+SFR & System Functional Requirement \\
+SRS & Software Requirements Specification \\
+Sentinel-2 & Earth-observation satellite mission providing multispectral
+imagery \\
+UFR & User Functional Requirement \\
+\end{longtable}
+
+\subsection{1.5 Document Conventions}\label{document-conventions}
+
+Requirements are identified by stable IDs where available. ``Shall''
+indicates a mandatory requirement. Tables are used to describe detailed
+system requirements, including function, inputs, outputs, dependencies,
+actions, preconditions, postconditions, and side effects. Requirement
+IDs from the supplied report are preserved in this draft;
+inconsistencies and gaps should be reviewed before final submission.
+
+\subsection{1.6 References and
+Acknowledgments}\label{references-and-acknowledgments}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Python 3.11+ Documentation
+\item
+  Django Documentation
+\item
+  Supabase Documentation
+\item
+  Google Earth Engine Documentation
+\item
+  Copernicus Sentinel-2 Satellite Imagery Documentation
+\item
+  StarUML --- UML Modeling Tool used to create Use Case Diagrams,
+  Sequence Diagrams, and Data Flow Diagrams (DFDs).
+\item
+  ChatGPT --- AI tool used for assistance in SRS structuring,
+  documentation, and requirement refinement.
+\item
+  Google Gemini --- AI tool used for assistance in research, idea
+  development, and documentation.
+\item
+  Class Diagram and Use Case Diagram --- Reference material.
+\item
+  Software Requirements Specification (SRS) Template --- Reference
+  structure provided for the project.
+\end{enumerate}
+
+\section{2. Overall Description}\label{overall-description}
+
+\subsection{2.1 Product Perspective}\label{product-perspective}
+
+The system is an internet-based application for site-level construction
+change monitoring. Users register a site using a name, bounding-box
+coordinates, and construction start date. The system requests suitable
+Sentinel-2 imagery through Google Earth Engine, compares imagery from
+different dates, generates a change mask and estimated changed-area
+measurements, presents AI-generated observations, and supports
+monitoring report generation and download.
+
+The system depends on external satellite imagery and geospatial
+services. Results depend on image availability, spatial resolution,
+cloud cover, image quality, and model performance. The system does not
+determine exact construction completion percentages, assess structural
+safety, or replace physical site inspections.
+
+\subsection{2.2 Product Functionality}\label{product-functionality}
+
+\begin{itemize}
+\item
+  Account registration, login, and logout.
+\item
+  Construction site registration, coordinate validation, map
+  confirmation, and site details viewing.
+\item
+  Site access requests and creator approval or rejection.
+\item
+  Retrieval of suitable Sentinel-2 imagery through Google Earth Engine.
+\item
+  Image preparation, change detection, generation of a change mask, and
+  calculation of estimated changed area.
+\item
+  Storage and retrieval of monitoring records and result references.
+\item
+  Dashboard display of sites, monitoring status, imagery, detected
+  changes, measurements, and AI observations.
+\item
+  Generation and download of monitoring reports.
+\item
+  Notifications for invalid input, unavailable imagery, processing
+  failures, and external-service or database errors.
+\end{itemize}
+
+\subsection{2.3 Users and
+Characteristics}\label{users-and-characteristics}
+
+Direct users are builders, construction site owners, and site
+supervisors. The supplied report states that registered users have the
+same general application permissions, while a site creator may approve
+or reject access requests for their own site.
+
+Indirect stakeholders include the Software Engineer, AI Engineer, and
+System Administrator. Domain stakeholders include Google Earth Engine
+and the Sentinel-2 satellite imagery provider.
+
+\subsection{2.4 Operating Environment}\label{operating-environment}
+
+The application is intended to be accessed through a modern web browser
+over the internet. The backend requires access to a database, Google
+Earth Engine services, and a processing environment capable of accessing
+satellite image pixels and running the selected computer-vision method.
+Exact deployment operating system, browser versions, memory, and storage
+minimums should be confirmed against the implementation.
+
+\subsection{2.5 Design and Implementation
+Constraints}\label{design-and-implementation-constraints}
+
+\begin{itemize}
+\item
+  Satellite image availability varies by location, date range, cloud
+  cover, and image quality.
+\item
+  Sentinel-2 imagery has finite spatial resolution; results must not
+  claim finer spatial detail than the source data supports.
+\item
+  Google Earth Engine usage is subject to its access, quota, and service
+  policies.
+\item
+  The processing pipeline must access actual image pixel data; storing
+  only image references is insufficient for model inference.
+\item
+  Generated masks and other output files may be stored separately from
+  database metadata, with references recorded in the database.
+\item
+  The application requires internet connectivity for its web interface
+  and external imagery services.
+\end{itemize}
+
+\subsection{2.6 User Documentation}\label{user-documentation}
+
+The final system should provide brief guidance for account creation,
+site registration, coordinate entry and confirmation, running an image
+comparison, interpreting change measurements and AI observations,
+viewing saved results, and generating/downloading reports. The actual
+user guide can be attached or linked when prepared.
+
+\subsection{2.7 Assumptions and
+Dependencies}\label{assumptions-and-dependencies}
+
+\begin{itemize}
+\item
+  Users provide site coordinates and a construction start date; they do
+  not upload satellite images.
+\item
+  Google Earth Engine provides access to suitable Sentinel-2 imagery
+  when available.
+\item
+  The database stores site details, image references and metadata,
+  monitoring records, measurements, and result references.
+\item
+  Image pixels must be available to the computer-vision processing
+  pipeline.
+\item
+  All registered users have the same general application permissions;
+  site creators have the site-specific ability to approve or reject
+  access requests.
+\item
+  AI-generated observations may be inaccurate and must remain grounded
+  in the available image analysis and measurements.
+\end{itemize}
+
+\subsection{2.8 Stakeholder Identification and
+Viewpoints}\label{stakeholder-identification-and-viewpoints}
+
+\subsection{1. List of Stakeholders}\label{list-of-stakeholders}
+
+\begin{itemize}
+\item
+  Construction Site Users: Builders, Owners, and Site Supervisors
+\item
+  Software Engineer
+\item
+  AI Engineer
+\item
+  System Administrator
+\item
+  Google Earth Engine
+\item
+  Sentinel-2 Satellite Imagery Provider
+\end{itemize}
+
+\subsection{2. Stakeholder Viewpoints}\label{stakeholder-viewpoints}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1804}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2888}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.5309}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Viewpoint} & \textbf{Stakeholder} & \textbf{Reason} \\
+Direct & Construction Site Users (Builders, Owners, and Site
+Supervisors) & Register construction sites, monitor progress, view
+detected changes, review historical results, and generate reports. All
+users have the same application permissions. \\
+Indirect & Software Engineer & Develop, maintain, and update the
+application and its backend services. \\
+Indirect & AI Engineer & Develop, train, evaluate, and improve the
+computer vision model and AI-based analysis. \\
+Indirect & System Administrator & Maintain system availability, manage
+technical configurations, and monitor system operation. \\
+Domain & Google Earth Engine & Provide access to satellite imagery and
+geospatial processing capabilities, subject to service limitations and
+usage policies. \\
+Domain & Sentinel-2 Satellite Imagery Provider & Supply satellite
+imagery used for construction-site monitoring, subject to image
+availability, spatial resolution, and data-usage conditions. \\
+\end{longtable}
+
+\section{3. Specific Requirements}\label{specific-requirements}
+
+\subsection{3.1 External Interface
+Requirements}\label{external-interface-requirements}
+
+\subsubsection{3.1.1 User Interfaces}\label{user-interfaces}
+
+The application interface should provide registration and login screens,
+a dashboard, construction site registration with a map-based coordinate
+confirmation step, site details and access-request screens, image
+comparison controls, saved monitoring results, AI insights, and report
+generation/download controls.
+
+\subsubsection{3.1.2 Hardware Interfaces}\label{hardware-interfaces}
+
+The user-side hardware requirements consist of a device capable of
+running a modern web browser with a stable internet connection. The
+server-side hardware requirements depend on the selected computer-vision
+model and deployment environment and will be finalized during
+implementation.
+
+\subsubsection{3.1.3 Software Interfaces}\label{software-interfaces}
+
+The system interfaces with Google Earth Engine for Sentinel-2 image
+retrieval and geospatial processing; a database for user, site,
+monitoring, and report metadata; a processing environment for image
+preparation and change detection; and any configured AI component used
+to generate observations. Exact database, map provider, AI service, and
+storage implementation details should be recorded once finalized.
+
+\subsubsection{3.1.4 Communications
+Interfaces}\label{communications-interfaces}
+
+The web application communicates with backend services over the internet
+using standard web protocols, normally HTTPS for production traffic.
+Backend services communicate with Google Earth Engine and the configured
+database using their supported APIs or drivers. Authentication
+credentials and sensitive data should be transmitted only through secure
+channels.
+
+\subsection{3.2 User Functional
+Requirements}\label{user-functional-requirements}
+
+\subsection{3. User Functional
+Requirements}\label{user-functional-requirements-1}
+
+\subsubsection{3.1. User Account
+Management}\label{user-account-management}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  FR1: The system shall allow users to create an account by providing
+  the required registration information.
+\item
+  FR2: The system shall allow registered users to log in using valid
+  credentials.
+\item
+  FR3: The system shall allow authenticated users to log out of their
+  accounts.
+\end{enumerate}
+
+\subsubsection{3.2. Data and Records
+Management}\label{data-and-records-management}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  FR4: The system shall store and retrieve user information,
+  construction site details, satellite imagery references, and
+  monitoring results via database.
+\item
+  FR5: The system shall maintain records of monitoring operations and
+  their associated results.
+\item
+  FR6: The system shall associate monitoring records with their
+  corresponding construction sites.
+\end{enumerate}
+
+\subsubsection{3.3. Construction Change
+Detection}\label{construction-change-detection}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  FR7: The system shall compare suitable satellite images captured at
+  different times to identify changes within a registered construction
+  site.
+\item
+  FR8: The system shall generate a change mask highlighting the areas
+  where changes have been detected.
+\item
+  FR9: The system shall display the original satellite images alongside
+  the corresponding change detection results.
+\end{enumerate}
+
+\subsubsection{3.4. AI-Based Construction
+Analysis}\label{ai-based-construction-analysis}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  FR10: The system shall analyze detected changes to provide insights
+  into construction site development over time.
+\item
+  FR11: The system shall summarize the detected changes in an
+  understandable format for users.
+\item
+  FR12: The system shall present AI-generated observations based on the
+  available image analysis results.
+\end{enumerate}
+
+\subsubsection{3.5. Dashboard and Results
+Visualization}\label{dashboard-and-results-visualization}
+
+\begin{itemize}
+\item
+  FR13: The system shall provide a dashboard displaying registered
+  construction sites and their monitoring status.
+\item
+  FR14: The system shall display satellite images, detected changes, and
+  calculated change measurements.
+\item
+  FR15: The system shall present monitoring results and detected changes
+  through appropriate visual overlays.
+\end{itemize}
+
+\subsubsection{3.7. Construction Site Registration and
+Management}\label{construction-site-registration-and-management}
+
+\begin{itemize}
+\item
+  FR16: The system shall allow users to register a construction site by
+  providing its name, geographical bounding-box coordinates, and
+  construction start date.
+\item
+  FR17: The system shall validate the provided coordinates and display
+  the selected location on a map for confirmation before completing
+  registration.
+\item
+  FR18: The system shall allow users to view the details of their
+  registered construction sites.
+\end{itemize}
+
+\subsubsection{\texorpdfstring{ 3.8. Construction Site Access and Member
+Management}{ 3.8. Construction Site Access and Member Management}}\label{construction-site-access-and-member-management}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  FR19: The system shall allow users to request access to a construction
+  site by providing its unique site identifier.
+\item
+  FR20: The system shall allow the creator of a construction site to
+  approve or reject access requests from other users.
+\end{enumerate}
+
+\subsubsection{3.9. Construction Progress
+Viewing}\label{construction-progress-viewing}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  FR21: The system shall allow users to view calculated change
+  measurements for a registered construction site over time.
+\item
+  FR22: The system shall allow users to compare monitoring results from
+  different dates to observe changes in the site.
+\item
+  FR23: The system shall allow users to view calculated change
+  measurements for the latest satellite comparison of a registered
+  construction site.
+\end{enumerate}
+
+\subsubsection{3.10. Monitoring Report
+Generation}\label{monitoring-report-generation}
+
+\begin{itemize}
+\item
+  FR24: The system shall allow users to generate reports for a selected
+  construction site and time period.
+\item
+  FR25: The system shall include relevant satellite images, change
+  detection results, and monitoring measurements in the generated
+  reports.
+\item
+  FR26: The system shall allow users to download generated reports for
+  record-keeping and review.
+\end{itemize}
+
+\subsubsection{3.11. Error Notifications and
+Handling}\label{error-notifications-and-handling}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  FR27: The system shall notify users when suitable satellite imagery is
+  unavailable for the selected site or date range.
+\item
+  FR28: The system shall inform users when a monitoring operation cannot
+  proceed because of a processing or service error.
+\item
+  FR29: The system shall notify users when submitted construction site
+  information is invalid or incomplete.
+\item
+  FR30: The system shall display an appropriate error message when a
+  monitoring operation fails.
+\item
+  FR31: The system shall handle database connectivity failures and
+  external service errors that prevent required application operations
+  from completing.
+\end{enumerate}
+
+\textbf{Note:} All registered users will have the same access
+permissions and functional capabilities within the application. The
+functional requirements listed above describe the
+system\textquotesingle s expected behavior from the
+user\textquotesingle s perspective. These requirements will be further
+refined into detailed System Functional Requirements (SFRs) to specify
+the system\textquotesingle s operations and expected responses.
+
+\subsection{3.3 System Functional
+Requirements}\label{system-functional-requirements}
+
+The following detailed system-level requirements are retained from the
+supplied report. Each requirement table is preserved with its function
+description, inputs and origin, outputs and destination, dependencies,
+actions, preconditions, postconditions, and side effects where those
+fields were present.
+
+\subsection{1. User Account Management}\label{user-account-management-1}
+
+This category covers account registration, login, and logout. We'll
+begin with three system-level requirements.
+
+\subsubsection{Requirement \# 1: User
+Registration}\label{requirement-1-user-registration}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1694}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8306}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall allow a new user to create an
+account by providing the required registration information. \\
+Input \& Origin & User registration information, including name, email
+address, and password, entered through the registration interface. \\
+Outputs and Destination & A confirmation message indicating successful
+registration, displayed to the user. The newly created account
+information is stored in the database. If registration fails, an
+appropriate error message is displayed. \\
+Requires & Registration interface, user authentication component, and
+database connectivity. \\
+Actions to be taken & 1. Receive the registration information from the
+user. 2. Validate that all required fields are provided and correctly
+formatted. 3. Check whether the email address is already associated with
+an existing account. 4. If the information is valid and the email is not
+registered, securely process the password and create the account. 5.
+Display the appropriate success or error message. \\
+Pre-condition & The user is not logged in and has access to the
+registration interface. \\
+Post-condition & Upon successful registration, a new user account exists
+in the database and can be used to access the system. \\
+Side Effects & A new user record is created in the database. No
+construction site or monitoring record is created at this stage. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 2: User
+Login}\label{requirement-2-user-login}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1662}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8338}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall allow registered users to log in
+using their valid email address and password. \\
+Input \& Origin & Email address and password entered by the user through
+the login interface. \\
+Outputs and Destination & Upon successful authentication, the user is
+redirected to the main dashboard. If authentication fails, an
+appropriate error message is displayed. \\
+Requires & Login interface, user authentication component, and database
+connectivity. \\
+Actions to be taken & 1. Receive the email address and password. 2.
+Validate that the required fields have been provided. 3. Retrieve the
+corresponding account record using the email address. 4. Verify the
+submitted password against the securely stored password information. 5.
+If the credentials are valid, establish an authenticated session or
+equivalent authentication state. 6. Redirect the user to the dashboard.
+Otherwise, display an error message. \\
+Pre-condition & The user has an existing account and is not currently
+logged in. \\
+Post-condition & Upon successful login, the user is authenticated and
+can access the system\textquotesingle s available features. \\
+Side Effects & An authenticated session or equivalent authentication
+state is established. No construction site data is modified by the login
+operation. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 3: User
+Logout}\label{requirement-3-user-logout}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1711}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8289}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall allow an authenticated user to
+log out of their account. \\
+Input \& Origin & A logout request initiated by the authenticated user
+through the application interface. \\
+Outputs and Destination & A logout confirmation or redirection to the
+login page is provided to the user. \\
+Requires & An active authenticated session or equivalent authentication
+state and the logout functionality. \\
+Actions to be taken & 1. Receive the logout request. 2. Invalidate the
+current authenticated session or authentication state. 3. Clear relevant
+authentication information maintained by the application. 4. Redirect
+the user to the login page or another publicly accessible page. 5.
+Ensure that protected pages and operations cannot be accessed using the
+invalidated authentication state. \\
+Pre-condition & The user is logged in to the system. \\
+Post-condition & The user\textquotesingle s current authenticated
+session is terminated, and access to protected features requires
+authentication again. \\
+Side Effects & The user may need to log in again to access protected
+features. Existing construction site records and monitoring results
+remain unchanged. \\
+\end{longtable}
+
+\subsection{2. Data and Records
+Management}\label{data-and-records-management-1}
+
+This category defines how the system stores, retrieves, and maintains
+records related to users, registered construction sites, satellite
+imagery, monitoring operations, and analysis results.
+
+\subsubsection{Requirement \# 4: Store and Retrieve System
+Records}\label{requirement-4-store-and-retrieve-system-records}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1713}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8287}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall store and retrieve the
+information required to operate the construction monitoring system. \\
+Input \& Origin & User account information from the registration
+process; construction site details from the site registration interface;
+satellite image metadata and references from GEE; monitoring results
+from the computer vision and AI processing pipeline. \\
+Outputs and Destination & Requested records are retrieved from the
+database and provided to the relevant application component for display
+or processing. New records are stored in the database. \\
+Requires & Database, database access component, and the relevant
+application modules. \\
+Actions to be taken & 1. Receive data from the relevant application
+component. 2. Validate the required data fields and formats. 3. Store
+new records in the appropriate database tables. 4. Retrieve requested
+records when needed by the application. 5. Return the retrieved records
+to the requesting component. 6. Report an appropriate error if a
+database operation fails. \\
+Pre-condition & The database is configured and accessible, and the
+requesting application component has supplied the required information
+for the operation. \\
+Post-condition & Valid information is stored successfully or the
+requested records are returned to the requesting component. \\
+Side Effects & Database records may be created, updated, or read. A
+failed operation may leave the requested data unavailable until the
+problem is resolved. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 5: Maintain Monitoring Operation
+Records}\label{requirement-5-maintain-monitoring-operation-records}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1694}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8306}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall maintain a record of each
+monitoring operation and its associated processing status and
+results. \\
+Input \& Origin & Monitoring operation details from the monitoring
+process management component, including the associated site, processing
+dates, operation status, and available result references. \\
+Outputs and Destination & A monitoring record containing the operation
+details and current status is stored in the database and made available
+to the relevant application components. \\
+Requires & Database, monitoring process management component, and
+computer vision processing pipeline. \\
+Actions to be taken & 1. Receive the details of a monitoring operation.
+2. Associate the operation with the relevant registered construction
+site. 3. Create a monitoring record when the operation begins. 4. Update
+the record as processing progresses. 5. Store the final status and
+references to the generated results when processing finishes. 6. Record
+a failure status if the operation cannot be completed. \\
+Pre-condition & A construction site has been registered, and a
+monitoring operation has been initiated or scheduled. \\
+Post-condition & A record exists for the monitoring operation,
+reflecting its latest known status and, when available, its results. \\
+Side Effects & A new monitoring record may be created or an existing
+record updated. The operation record itself does not guarantee that
+suitable satellite imagery or successful analysis results are
+available. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 6: Associate Records with Their
+Corresponding Construction
+Sites}\label{requirement-6-associate-records-with-their-corresponding-construction-sites}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1694}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8306}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall associate satellite imagery
+metadata, monitoring operations, and analysis results with their
+corresponding registered construction sites. \\
+Input \& Origin & Construction site identifier, satellite image
+references and metadata from the imagery retrieval component, and
+monitoring result references from the processing pipeline. \\
+Outputs and Destination & Associated records are stored in the database
+and can be retrieved by the relevant application components using the
+construction site identifier. \\
+Requires & Database, construction site records, imagery retrieval
+component, and monitoring process management component. \\
+Actions to be taken & 1. Receive the construction site identifier with
+the relevant imagery, monitoring, or result information. 2. Verify that
+the referenced construction site exists. 3. Associate the information
+with that site using the appropriate database relationship. 4. Store the
+association and related information. 5. Reject the association and
+report an error if the site identifier is invalid. \\
+Pre-condition & The construction site has been registered, and the
+relevant imagery, monitoring, or result information is available for
+association. \\
+Post-condition & The relevant records are linked to the correct
+construction site and can be retrieved for site monitoring only. \\
+Side Effects & Database relationships may be created or updated. No
+satellite image is downloaded or processed solely because a record is
+associated with a site. \\
+\end{longtable}
+
+\subsection{3. Construction Change
+Detection}\label{construction-change-detection-1}
+
+This category defines how the system retrieves suitable Sentinel-2
+satellite imagery through Google Earth Engine (GEE), prepares images for
+comparison, detects changes between different dates, and presents the
+detected areas.
+
+\subsubsection{Requirement \# 7: Retrieve Suitable Satellite
+Images}\label{requirement-7-retrieve-suitable-satellite-images}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1645}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8355}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall retrieve suitable satellite
+imagery for a registered construction site and a specified monitoring
+period using Google Earth Engine. \\
+Input \& Origin & Construction site bounding-box coordinates and
+monitoring date range from the database; satellite imagery availability
+and metadata from GEE. \\
+Outputs and Destination & References to suitable satellite images, their
+acquisition dates, and relevant metadata are provided to the computer
+vision processing pipeline and stored in the database. If no suitable
+imagery is available, the system reports this condition to the
+monitoring process management component. \\
+Requires & Google Earth Engine access, registered construction site
+information, database connectivity, and an imagery retrieval
+component. \\
+Actions to be taken & 1. Retrieve the selected site\textquotesingle s
+coordinates and requested date range. 2. Query GEE for Sentinel-2
+imagery covering the site and period. 3. Apply appropriate date, spatial
+coverage, and image-quality filters, including cloud-related filtering.
+4. Identify imagery suitable for comparison. 5. Return the image
+references and relevant metadata to the processing pipeline. 6. Store
+the references and metadata in the database. 7. Report when no suitable
+imagery is found or retrieval fails. \\
+Pre-condition & A construction site has been registered, a valid
+monitoring period is available, and GEE access is configured. \\
+Post-condition & Suitable image references and metadata are available
+for processing, or the system records that suitable imagery could not be
+retrieved. \\
+Side Effects & GEE requests may consume available service quota or
+processing resources. Imagery retrieval does not guarantee that every
+requested date will have a usable image. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 8: Preprocess Satellite Images for
+Comparison}\label{requirement-8-preprocess-satellite-images-for-comparison}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1648}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8352}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall prepare retrieved satellite
+images to make them suitable for change detection. \\
+Input \& Origin & Satellite image pixel data, acquisition dates, and
+image metadata retrieved through GEE or made available to the processing
+environment. \\
+Outputs and Destination & Preprocessed and comparable images are
+provided to the computer vision change detection component. Relevant
+preprocessing information may be stored with the monitoring record. \\
+Requires & Satellite imagery retrieval component, image preprocessing
+component, and access to the actual image pixel data. \\
+Actions to be taken & 1. Retrieve or access the actual pixel data for
+the selected images. 2. Apply appropriate quality and cloud masking
+where required. 3. Ensure that images cover the registered construction
+site. 4. Prepare images using consistent spatial coverage, resolution,
+and data formats. 5. Check whether the resulting images are suitable for
+comparison. 6. Pass suitable image pairs to the change detection
+component or report why preprocessing could not be completed. \\
+Pre-condition & At least two candidate satellite images are available
+for the selected site and monitoring period. \\
+Post-condition & Suitable preprocessed image pairs are available for
+change detection, or the system identifies that the images cannot be
+compared reliably. \\
+Side Effects & Temporary image data and intermediate processing files
+may be created. Preprocessing may exclude images or areas that do not
+meet the required quality conditions. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 9: Detect Changes Between Satellite
+Images}\label{requirement-9-detect-changes-between-satellite-images}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1662}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8338}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall compare suitable satellite
+images acquired at different times and identify areas where detectable
+changes have occurred within a registered construction site. \\
+Input \& Origin & A suitable pair of preprocessed satellite images from
+the image preprocessing component and the corresponding site information
+from the database. \\
+Outputs and Destination & A change mask identifying detected changed and
+unchanged areas, along with relevant processing metadata, is provided to
+the results visualization and analysis components. \\
+Requires & Preprocessed image pairs, a trained or configured computer
+vision change detection model, and the processing environment. \\
+Actions to be taken & 1. Receive the selected image pair and associated
+metadata. 2. Provide the images to the change detection model. 3.
+Compare the images to identify areas exhibiting detectable changes. 4.
+Generate a change mask representing the detected changes. 5. Associate
+the output with the corresponding site and image dates. 6. Pass the
+change mask and processing information to the relevant components. 7.
+Report an error if inference fails. \\
+Pre-condition & Two suitable, preprocessed satellite images of the same
+site from different dates are available, and the change detection model
+is ready for use. \\
+Post-condition & A change mask and associated metadata are generated and
+made available to the results processing components, or a failure status
+is recorded. \\
+Side Effects & Processing consumes computing resources. Detection errors
+may occur because of image quality, resolution, seasonal differences,
+shadows, or model limitations. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 10: Calculate and Store Detected Change
+Measurements}\label{requirement-10-calculate-and-store-detected-change-measurements}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1629}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8371}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall calculate the estimated area
+represented by detected changes and associate the measurements with the
+corresponding monitoring operation. \\
+Input \& Origin & Generated change mask, image resolution or spatial
+metadata, site boundary information, and monitoring dates from the
+change detection component and database. \\
+Outputs and Destination & Estimated changed-area measurements,
+measurement units, and associated dates are stored in the database and
+provided to the dashboard and AI-based analysis components. \\
+Requires & Change mask, geospatial metadata, area calculation component,
+and database connectivity. \\
+Actions to be taken & 1. Receive the generated change mask and relevant
+spatial metadata. 2. Identify the pixels classified as changed within
+the site boundary. 3. Calculate the estimated area represented by the
+detected pixels using the appropriate spatial resolution or geospatial
+calculation method. 4. Associate the measurement with the relevant image
+dates and monitoring operation. 5. Store the measurement and its unit in
+the database. 6. Report an error if the required spatial information is
+unavailable or the calculation fails. \\
+Pre-condition & A valid change mask and sufficient spatial metadata are
+available for the registered construction site. \\
+Post-condition & The estimated changed area is calculated and stored
+with its corresponding monitoring record, or the system records that the
+measurement could not be calculated. \\
+Side Effects & New measurement records may be created. The calculated
+area represents detected image changes and does not necessarily equal
+the actual construction area or percentage of construction completed. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 11: Display Change Detection
+Results}\label{requirement-11-display-change-detection-results}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1678}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8322}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall display the satellite images
+used for comparison and the corresponding detected changes to the
+user. \\
+Input \& Origin & Original or processed satellite images, acquisition
+dates, generated change masks, and calculated change measurements from
+the database and processing pipeline. \\
+Outputs and Destination & A visual comparison of the selected images,
+highlighted changed areas, acquisition dates, and available change
+measurements is displayed on the application\textquotesingle s results
+interface. \\
+Requires & Results visualization component, image and result references,
+and access to the corresponding image data and generated outputs. \\
+Actions to be taken & 1. Receive the selected monitoring result. 2.
+Retrieve the corresponding satellite images or their stored
+representations. 3. Retrieve the associated change mask and
+measurements. 4. Display the images with their acquisition dates. 5.
+Overlay or otherwise visualize the detected changed areas. 6. Display
+the available measurements and report an error if the required results
+cannot be retrieved. \\
+Pre-condition & At least one completed change detection operation has
+produced results available for display. \\
+Post-condition & The user can view the relevant images, detected
+changes, and available measurements for the selected monitoring
+operation. \\
+Side Effects & Image and result data may be loaded into the
+user\textquotesingle s browser or application session. Displaying
+results does not modify the stored analysis records. \\
+\end{longtable}
+
+\subsection{4. AI-Based Construction
+Analysis}\label{ai-based-construction-analysis-1}
+
+This category defines how the system interprets the outputs of computer
+vision analysis and presents understandable observations about changes
+detected at a construction site. AI-generated insights must be based on
+available monitoring results and should not claim more than the
+satellite imagery supports.
+
+\subsubsection{Requirement \# 12: Analyze Detected Construction
+Changes}\label{requirement-12-analyze-detected-construction-changes}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1662}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8338}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall analyze detected change
+measurements and associated monitoring information to identify patterns
+in construction site development over time. \\
+Input \& Origin & Change masks, estimated changed areas, satellite image
+acquisition dates, and historical monitoring results from the computer
+vision pipeline and database. \\
+Outputs and Destination & Analysis findings, identified change patterns,
+and relevant observations are provided to the dashboard and AI-generated
+insights component. \\
+Requires & Completed change detection results, stored monitoring
+records, and an analysis component. \\
+Actions to be taken & 1. Retrieve the available change measurements and
+corresponding monitoring dates. 2. Identify observable patterns, such as
+increases or decreases in detected changed areas. 3. Generate analysis
+findings based on the available evidence. 4. Make the findings available
+to the dashboard and insights component. \\
+Pre-condition & At least one completed monitoring operation has produced
+valid change measurements. \\
+Post-condition & Analysis findings are generated from the available
+monitoring results and associated with the relevant construction site
+and monitoring period. \\
+Side Effects & Additional analysis records may be stored. Incomplete or
+inconsistent monitoring data may limit the reliability of identified
+patterns. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 13: Generate AI-Based Construction
+Insights}\label{requirement-13-generate-ai-based-construction-insights}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1629}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8371}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall generate understandable AI-based
+observations from available construction monitoring results to help
+users interpret detected changes. \\
+Input \& Origin & Change detection measurements, image dates, and
+relevant analysis findings supplied by the computer vision pipeline and
+database. \\
+Outputs and Destination & A textual summary of observed changes,
+possible development patterns, and relevant limitations is provided to
+the dashboard. \\
+Requires & Available monitoring results, analysis findings, and an
+AI-based insight generation component. \\
+Actions to be taken & 1. Retrieve the relevant monitoring results and
+analysis findings. 2. Prepare the available measurements, and dates as
+input to the AI component. 3. Generate a concise explanation of the
+observed changes. 4. Ensure that the explanation is based on the
+supplied evidence and does not present unsupported conclusions as facts.
+5. Associate the generated insights with the corresponding site and
+monitoring period. 6. Provide the insights to the dashboard. 7. Report
+an appropriate error if insight generation fails. \\
+Pre-condition & Relevant monitoring results or analysis findings are
+available, and the AI component is configured and accessible. \\
+Post-condition & AI-generated observations are available for display, or
+the system records that insight generation was unsuccessful. \\
+Side Effects & AI processing may consume computing resources or external
+service quota, depending on the implementation. Generated observations
+may contain inaccuracies and must not be treated as definitive evidence
+of construction completion or structural safety. \\
+\end{longtable}
+
+\subsubsection{}\label{section}
+
+\subsubsection{}\label{section-1}
+
+\subsubsection{}\label{section-2}
+
+\subsubsection{Requirement \# 14: Display AI Analysis and Its Supporting
+Measurements}\label{requirement-14-display-ai-analysis-and-its-supporting-measurements}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1694}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8306}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall display AI-generated
+construction insights alongside the corresponding monitoring
+measurements and dates. \\
+Input \& Origin & Generated AI observations, estimated changed-area
+measurements, monitoring dates, and for a selected monitoring check and
+allow users to generate and download reports. from the analysis
+component and database. \\
+Outputs and Destination & An integrated presentation of AI insights and
+supporting monitoring data is displayed on the construction
+site\textquotesingle s results dashboard. \\
+Requires & AI insight generation component, stored monitoring results,
+database connectivity, and dashboard visualization component. \\
+Actions to be taken & 1. Retrieve the AI-generated observations for the
+selected site or monitoring period. 2. Retrieve the measurements and
+dates associated with those observations. 3. Display the observations
+alongside their supporting information. 4. Identify the relevant
+monitoring period for each observation. 5. Indicate when AI insights are
+unavailable or could not be generated. \\
+Pre-condition & The user has selected a registered construction site or
+monitoring record, and the relevant results are available. \\
+Post-condition & The user can review the generated observations together
+with the measurements and monitoring dates used to support them. \\
+Side Effects & Displaying the analysis does not modify the underlying
+satellite imagery, change masks, or monitoring measurements. \\
+\end{longtable}
+
+\subsection{5. Dashboard and Results
+Visualization}\label{dashboard-and-results-visualization-1}
+
+This category defines how the system presents registered construction
+sites, monitoring operations, satellite imagery, detected changes,
+measurements, and AI-generated insights through a user-friendly
+dashboard.
+
+\subsubsection{Requirement \# 15: Display the Main
+Dashboard}\label{requirement-15-display-the-main-dashboard}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1664}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8336}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall provide an interactive dashboard
+displaying the user\textquotesingle s registered construction sites and
+their monitoring status. \\
+Input \& Origin & Registered construction site details and monitoring
+status records retrieved from the database. \\
+Outputs and Destination & A dashboard containing the registered site
+list, site details, and monitoring statuses is displayed to the user. \\
+Requires & User authentication, database connectivity, construction site
+management component, and dashboard interface. \\
+Actions to be taken & 1. Verify that the user is authenticated. 2.
+Retrieve the construction sites associated with the
+user\textquotesingle s account. 3. Retrieve the latest available
+monitoring status for each site. 4. Display the site names and relevant
+summary information. 5. Allow the user to select a site to view its
+details and monitoring results. 6. Display an appropriate message if no
+sites have been registered or if the information cannot be retrieved. \\
+Pre-condition & The user is authenticated and the dashboard interface is
+accessible. \\
+Post-condition & The dashboard displays the available construction site
+information and monitoring statuses, or an appropriate empty-state or
+error message. \\
+Side Effects & Dashboard data may be retrieved from the database. No
+site details or monitoring results are modified by displaying the
+dashboard. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 16: Display Construction Site Monitoring
+Results}\label{requirement-16-display-construction-site-monitoring-results}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1681}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8319}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall display the available monitoring
+results for a selected construction site. \\
+Input \& Origin & Selected construction site identifier, satellite image
+references, acquisition dates, change masks, estimated changed areas,
+and AI-generated insights from the database and processing
+components. \\
+Outputs and Destination & A site-specific results view displaying
+available satellite images, detected changes, measurements, monitoring
+dates, and AI-generated observations. \\
+Requires & Registered construction site information, completed
+monitoring results, database connectivity, and results visualization
+component. \\
+Actions to be taken & 1. Receive the user\textquotesingle s selection of
+a construction site. 2. Retrieve the associated monitoring records. 3.
+Retrieve the available image and change detection output references. 4.
+Display the relevant images, acquisition dates, and detected changes. 5.
+Display calculated measurements and available AI-generated insights. 6.
+Indicate when results are unavailable or could not be retrieved. \\
+Pre-condition & The user is authenticated and has selected a registered
+construction site. \\
+Post-condition & The available monitoring results for the selected site
+are displayed, or the system informs the user that no results are
+available. \\
+Side Effects & Relevant images and result data may be loaded into the
+application session. Stored monitoring records remain unchanged. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 17: Display Construction Site Location on
+a Map}\label{requirement-17-display-construction-site-location-on-a-map}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1711}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8289}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall display the geographical
+location and registered bounding box of a selected construction site on
+a map. \\
+Input \& Origin & Construction site bounding-box coordinates and site
+name retrieved from the database. \\
+Outputs and Destination & A map displaying the selected construction
+site\textquotesingle s location and geographical boundary is presented
+to the user. \\
+Requires & Registered site coordinates, map visualization component, and
+access to the map data or map service used by the application. \\
+Actions to be taken & 1. Receive the selected construction site
+identifier. 2. Retrieve its stored coordinates. 3. Convert the
+coordinates into the format required by the map component. 4. Display
+the location and bounding box on the map. 5. Adjust the map view to show
+the selected site. 6. Display an appropriate message if the coordinates
+are unavailable or cannot be displayed. \\
+Pre-condition & The user is authenticated and has selected a registered
+construction site with valid geographical coordinates. \\
+Post-condition & The site\textquotesingle s registered location and
+boundary are displayed on the map, or the system reports that the
+location cannot be displayed. \\
+Side Effects & The map component may request map data from an external
+service. Displaying the location does not modify the registered
+coordinates. \\
+\end{longtable}
+
+\subsection{7. Construction Site Registration and
+Management}\label{construction-site-registration-and-management-1}
+
+This category defines how users register construction sites, validate
+geographical coordinates, confirm the selected location on a map, and
+view their registered site information.
+
+\subsubsection{Requirement \# 18: Register a Construction
+Site}\label{requirement-23-register-a-construction-site}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1629}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8371}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall allow an authenticated user to
+register a construction site by providing its name, geographical
+bounding-box coordinates, and construction start date. \\
+Input \& Origin & Site name, four bounding-box coordinates (minimum and
+maximum latitude and longitude), and construction start date entered
+through the site registration interface. \\
+Outputs and Destination & Upon successful registration, a confirmation
+message is displayed, and the construction site information is stored in
+the database. If registration fails, an appropriate error message is
+displayed. \\
+Requires & User authentication, site registration interface, coordinate
+validation component, database connectivity, and map visualization
+component. \\
+Actions to be taken & \begin{minipage}[t]{\linewidth}\raggedright
+1. Receive the site name, bounding-box coordinates, and construction
+start date.\\
+2. Validate that all required fields are provided.\\
+3. Validate the coordinate values and ensure that the bounding box is
+geographically valid. 4. Verify that the construction start date is
+valid and not in the future.\\
+5. Display the selected location on a map for user confirmation.\\
+6. After confirmation, store the site information in the database and
+associate it with the registering user.\\
+7. Display a success message or an appropriate validation or storage
+error.\strut
+\end{minipage} \\
+Pre-condition & The user is authenticated and has access to the
+construction site registration interface. \\
+Post-condition & A valid, confirmed construction site is stored in the
+database and associated with the registering user, or registration
+remains incomplete if validation, confirmation, or storage fails. \\
+Side Effects & A new construction site record may be created. The site
+becomes available for subsequent monitoring operations after successful
+registration. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 19: Validate and Confirm Construction Site
+Coordinates}\label{requirement-24-validate-and-confirm-construction-site-coordinates}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1613}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8387}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall validate the submitted
+geographical coordinates and display the corresponding bounding box on a
+map before completing site registration. \\
+Input \& Origin & Minimum and maximum latitude and longitude entered by
+the user through the site registration interface. \\
+Outputs and Destination & Coordinate validation results and a map
+displaying the selected geographical boundary are presented to the user.
+Invalid coordinates result in an appropriate error message. \\
+Requires & Site registration interface, coordinate validation component,
+and map visualization component. \\
+Actions to be taken & \begin{minipage}[t]{\linewidth}\raggedright
+1. Receive the four bounding-box coordinates.\\
+2. Check that all coordinate values are numeric and within valid
+latitude and longitude ranges.\\
+3. Verify that the minimum latitude is less than the maximum latitude
+and the minimum longitude is less than the maximum longitude.\\
+4. If the coordinates are valid, display the bounding box on the map.\\
+5. Ask the user to confirm that the displayed location is correct.\\
+6. Allow the user to correct the coordinates if the location is
+incorrect.\\
+7. Prevent registration from proceeding with invalid or unconfirmed
+coordinates.\strut
+\end{minipage} \\
+Pre-condition & The user has opened the site registration interface and
+entered the geographical coordinates. \\
+Post-condition & Valid coordinates are displayed for confirmation, or
+the user is informed that the coordinates are invalid. Site registration
+can proceed only after successful validation and confirmation. \\
+Side Effects & The map component may request map data from an external
+service. No construction site record is finalized solely by validating
+or displaying the coordinates. \\
+\end{longtable}
+
+\subsubsection{}\label{section-3}
+
+\subsubsection{Requirement \# 20: View Registered Construction Site
+Details}\label{requirement-25-view-registered-construction-site-details}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1694}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8306}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall allow authenticated users to
+view the details of their registered construction sites. \\
+Input \& Origin & A selected construction site identifier or a request
+to view registered sites submitted through the dashboard. \\
+Outputs and Destination & The site\textquotesingle s name, geographical
+coordinates, construction start date, and other available site
+information are displayed to the user. \\
+Requires & User authentication, construction site records, database
+connectivity, and site details interface. \\
+Actions to be taken & \begin{minipage}[t]{\linewidth}\raggedright
+1. Receive the request to view registered sites or a specific
+site\textquotesingle s details.\\
+2. Retrieve the relevant site records associated with the
+user\textquotesingle s account.\\
+3. If a specific site is selected, retrieve its stored details.\\
+4. Display the available information in the site details interface.\\
+5. Display an appropriate message if no sites are registered or the
+requested record cannot be retrieved.\strut
+\end{minipage} \\
+Pre-condition & The user is authenticated and has access to the site
+management interface. \\
+Post-condition & The requested registered site information is displayed,
+or the system informs the user that the information is unavailable. \\
+Side Effects & Site records may be retrieved from the database. Viewing
+site details does not modify the stored information. \\
+\end{longtable}
+
+\subsection{8. Construction Site Registration and
+Management}\label{construction-site-registration-and-management-2}
+
+\subsubsection{Requirement \# 21: Request Access to a Construction Site}\label{sfr-21-request-access}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1680}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8320}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Field
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Function Description & The system shall allow users to request access to
+a registered construction site by providing its unique site
+identifier. \\
+Input \& Origin & Unique construction site identifier entered by the
+user and validated against construction site records stored in the
+database. \\
+Outputs and Destination & A confirmation message indicating successful
+submission, or an appropriate message explaining why the request could
+not be submitted, shall be displayed to the user. The request details
+shall be stored in the database for review by the construction site
+creator. \\
+Requires & User authentication and an existing registered construction
+site. \\
+Actions to be Taken & Verify that the site exists and check whether the
+user already has access or has an existing pending request. If no
+duplicate request exists, create an access request associated with the
+user and the construction site. \\
+Pre-condition & The user must be logged in, and the construction site
+must be registered in the system. \\
+Post-condition & A valid access request is stored with a pending status
+for review by the construction site creator. \\
+Side Effects & A new access request record is added to the database. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 22: Approve or Reject Construction Site Access Requests}\label{sfr-22-approve-reject-access}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1651}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8349}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Field
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Function Description & The system shall allow the creator of a
+construction site to review access requests and approve or reject
+requests submitted by other users. \\
+Input \& Origin & Construction site identifier, access request details,
+and the approval or rejection decision selected by the construction site
+creator through the user interface. \\
+Outputs and Destination & The updated request status and the result of
+the decision shall be displayed to the construction site creator. The
+access request status shall be updated in the database, and access
+permissions shall be updated when the request is approved. \\
+Requires & User authentication, construction site records, and pending
+access requests. \\
+Actions to be Taken & Verify that the user making the decision is the
+creator of the relevant construction site and that the request is
+pending. If approved, grant the requesting user access and update the
+request status to approved. If rejected, update the request status to
+rejected without granting access. \\
+Pre-condition & The user must be logged in as the creator of the
+relevant construction site, and the access request must have a pending
+status. \\
+Post-condition & The access request status is updated to approved or
+rejected. Access is granted only when the request is approved. \\
+Side Effects & The access request record and, when applicable, the
+site\textquotesingle s membership and access permissions are updated in
+the database. \\
+\end{longtable}
+
+\subsection{8. Construction Progress
+Monitoring}\label{construction-progress-monitoring}
+
+This category defines how the system presents monitoring results over
+time, compares observations from different dates, and helps users assess
+changes in construction sites using available satellite imagery and
+calculated measurements.
+
+\subsubsection{Requirement \# 23: View Construction Change Measurements
+Over
+Time}\label{requirement-26-view-construction-change-measurements-over-time}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1678}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8322}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall allow users to view calculated
+changed-area measurements for a registered construction site viewing the
+latest calculated change measurement. \\
+Input \& Origin & Selected construction site identifier and available
+monitoring records containing acquisition dates and estimated
+changed-area measurements, retrieved from the database. \\
+Outputs and Destination & A chronological list or visualization of
+available changed-area measurements, including their corresponding
+monitoring dates and measurement units, is displayed to the user. \\
+Requires & Registered construction site information, historical
+monitoring records, database connectivity, and dashboard visualization
+component. \\
+Actions to be taken & \begin{minipage}[t]{\linewidth}\raggedright
+1. Receive the selected construction site identifier.\\
+2. Retrieve the site\textquotesingle s available monitoring measurements
+and associated dates.\\
+3. Arrange the measurements in chronological order.\\
+4. Display each measurement with its corresponding date and unit.\\
+5. Indicate when measurements are unavailable for some monitoring
+periods.\\
+6. Display an appropriate message if no valid measurements are
+available.\strut
+\end{minipage} \\
+Pre-condition & The user is authenticated and has selected a registered
+construction site. \\
+Post-condition & Available change measurements are displayed
+chronologically, or the system informs the user that no valid
+measurements are available. \\
+Side Effects & Historical monitoring records may be retrieved for
+display. Stored measurements remain unchanged. \\
+\end{longtable}
+
+\subsection{9. Monitoring Report
+Generation}\label{monitoring-report-generation-1}
+
+This category defines how users generate and download reports containing
+construction site monitoring information, satellite imagery, detected
+changes, measurements, and relevant AI-generated insights.
+
+\subsubsection{Requirement \# 24: Generate a Construction Monitoring
+Report}\label{requirement-29-generate-a-construction-monitoring-report}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1613}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8387}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall allow users to generate a
+monitoring report for a selected construction site and monitoring
+period. \\
+Input \& Origin & Selected construction site, requested date range, and
+report generation request submitted by the user through the
+dashboard. \\
+Outputs and Destination & A monitoring report containing the available
+information for the selected site and period is generated and made
+available to the user. \\
+Requires & Registered construction site information, monitoring records,
+report generation component, database connectivity, and access to the
+relevant monitoring results. \\
+Actions to be taken & \begin{minipage}[t]{\linewidth}\raggedright
+1. Receive the selected construction site and requested date range.\\
+2. Validate the selected site and date range.\\
+3. Retrieve the relevant monitoring records within the requested
+period.\\
+4. Collect the available change detection results, measurements, and
+AI-generated insights. 5. Organize the information into a structured
+report.\\
+6. Generate the report in pdf.\\
+7. Make the generated report available for download.\\
+8. Display an appropriate message if the report cannot be generated or
+the requested period contains no usable results.\strut
+\end{minipage} \\
+Pre-condition & The user is authenticated, a construction site is
+selected, and the requested reporting period is valid. \\
+Post-condition & A report is generated for the selected site and period
+when sufficient information is available, or the system informs the user
+that report generation was unsuccessful. \\
+Side Effects & Report files may be created in temporary or persistent
+storage. Report generation may consume processing resources. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 25: Include Monitoring Information in the
+Report}\label{requirement-30-include-monitoring-information-in-the-report}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1613}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8387}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall include the relevant
+construction site and monitoring information available for the selected
+reporting period in the generated report. \\
+Input \& Origin & Construction site details, monitoring dates, estimated
+changed-area measurements, and AI-generated insights retrieved from the
+database and processing pipeline. \\
+Outputs and Destination & A structured report containing the applicable
+site information, monitoring observations, and supporting visual or
+numerical results is provided to the report generation component. \\
+Requires & Site records, completed monitoring results, image and output
+references, report generation component, and database connectivity. \\
+Actions to be taken & \begin{minipage}[t]{\linewidth}\raggedright
+1. Retrieve the registered construction site details.\\
+2. Retrieve monitoring records corresponding to the selected period.\\
+3. Include the site name, geographical information, and reporting
+period.\\
+4. Include acquisition dates.\\
+5. Include the corresponding change detection visualizations and
+estimated measurements. 6. Include available AI-generated observations
+and relevant limitations.\\
+7. Ensure that each result is associated with its corresponding
+monitoring date.\\
+8. Pass the assembled information to the report generation
+component.\strut
+\end{minipage} \\
+Pre-condition & A valid report request exists, and relevant site
+information and monitoring records are available. \\
+Post-condition & The report contains the available information relevant
+to the selected site and reporting period, with results associated with
+their corresponding dates. \\
+Side Effects & Selected images and analysis results may be retrieved or
+temporarily assembled for report generation. The original records remain
+unchanged. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 26: Download a Generated Monitoring
+Report}\label{requirement-31-download-a-generated-monitoring-report}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1726}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8274}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall allow users to download a
+successfully generated construction monitoring report. \\
+Input \& Origin & A download request for a generated report, initiated
+by the user through the report interface. \\
+Outputs and Destination & The generated report file is delivered to the
+user\textquotesingle s browser for downloading to their device. \\
+Requires & A successfully generated report, report file storage or
+retrieval mechanism, user authentication, and report download
+functionality. \\
+Actions to be taken & \begin{minipage}[t]{\linewidth}\raggedright
+1. Receive the user\textquotesingle s download request.\\
+2. Identify the requested report.\\
+3. Create a Report\\
+4. Deliver the file to the user\textquotesingle s browser in pdf
+format.\\
+6. Display an appropriate error message if the report is unavailable or
+the download fails.\strut
+\end{minipage} \\
+Pre-condition & The user is authenticated, and a successfully generated
+report is available for download. \\
+Post-condition & The report file is made available to the user for
+downloading, or the system informs the user that the download could not
+be completed. \\
+Side Effects & Network bandwidth may be consumed during the download.
+Downloading a report does not modify the stored monitoring results. \\
+\end{longtable}
+
+\subsection{10. Error Notifications and
+Handling}\label{error-notifications-and-handling-1}
+
+This category defines how the system identifies errors, informs users
+about problems, and handles situations that prevent site registration,
+satellite imagery retrieval, monitoring, analysis, or report generation
+from completing successfully.
+
+\subsubsection{Requirement \# 27: Notify Users About Invalid or
+Incomplete Site
+Information}\label{requirement-32-notify-users-about-invalid-or-incomplete-site-information}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1662}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8338}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall notify users when submitted
+construction site information is incomplete or invalid. \\
+Input \& Origin & Site name, geographical bounding-box coordinates,
+construction start date, and other required site information submitted
+through the site registration interface. \\
+Outputs and Destination & An appropriate validation error message is
+displayed to the user, identifying the field or information that
+requires correction. \\
+Requires & Site registration interface, input validation component, and
+coordinate validation component. \\
+Actions to be taken & 1. Receive the submitted construction site
+information. 2. Check that all required fields are provided. 3. Validate
+the field formats and coordinate ranges. 4. Verify that the bounding-box
+coordinates define a valid geographical area. 5. Validate the
+construction start date. 6. Identify any invalid or missing information.
+7. Display an appropriate error message and prevent registration until
+the required corrections are made. \\
+Pre-condition & The user has opened the site registration interface and
+submitted or attempted to submit construction site information. \\
+Post-condition & Invalid or incomplete information is identified and
+communicated to the user. The site is not registered until the required
+validation checks are passed. \\
+Side Effects & Validation messages may be displayed, but no valid
+construction site record is created from the rejected submission. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 28: Notify Users When Suitable Satellite
+Imagery Is
+Unavailable}\label{requirement-33-notify-users-when-suitable-satellite-imagery-is-unavailable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1645}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8355}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall notify users when suitable
+satellite imagery cannot be found for the selected construction site and
+monitoring period. \\
+Input \& Origin & Construction site coordinates, requested monitoring
+date range, and imagery availability or quality information returned by
+GEE. \\
+Outputs and Destination & A notification explaining that suitable
+satellite imagery is unavailable is displayed to the user and associated
+with the relevant monitoring operation. \\
+Requires & GEE access, imagery retrieval component, image-quality
+filtering component, and monitoring process management component. \\
+Actions to be taken & 1. Receive the imagery retrieval results. 2.
+Determine whether suitable images are available for the requested site
+and period. 3. Identify whether the issue results from unavailable
+imagery, image quality, cloud cover, or insufficient suitable image
+pairs, where this information is available. 4. Record the appropriate
+monitoring status. 5. Display an understandable notification to the
+user. 6. Allow the user to select another monitoring period or retry
+when appropriate. \\
+Pre-condition & A monitoring operation has requested satellite imagery
+for a registered construction site. \\
+Post-condition & The user is informed when suitable imagery is
+unavailable, and the monitoring operation is recorded with an
+appropriate status. \\
+Side Effects & The monitoring operation may remain incomplete.
+Previously completed monitoring results remain available. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 29: Handle Monitoring and Processing
+Errors}\label{requirement-34-handle-monitoring-and-processing-errors}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1662}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8338}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall detect and handle errors
+occurring during satellite imagery retrieval, image preprocessing,
+change detection, measurement calculation, or AI analysis. \\
+Input \& Origin & Error codes, exception information, service responses,
+and processing status information generated by the relevant system
+components. \\
+Outputs and Destination & An appropriate error notification is displayed
+to the user, and relevant failure information is recorded in the
+monitoring operation record. \\
+Requires & Error handling mechanism, monitoring process management
+component, processing pipeline, database connectivity, and logging
+facility. \\
+Actions to be taken & 1. Receive an error from the affected component.
+2. Identify the associated monitoring operation and processing stage. 3.
+Record the failure status and relevant diagnostic information. 4.
+Prevent the operation from being incorrectly marked as successfully
+completed. 5. Preserve previously completed results. 6. Display a
+user-friendly notification without exposing sensitive technical details.
+7. Permit a retry when appropriate and safe. \\
+Pre-condition & A monitoring or analysis operation is in progress, and a
+system component reports an error. \\
+Post-condition & The error is handled, relevant failure information is
+recorded, and the user is informed of the unsuccessful operation or
+affected processing stage. \\
+Side Effects & Partial outputs or temporary processing files may remain
+and require cleanup. Retrying an operation may consume additional
+computing resources or GEE service quota. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 30: Handle Report Generation and Download
+Errors}\label{requirement-35-handle-report-generation-and-download-errors}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1662}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8338}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall notify users when a monitoring
+report cannot be generated or downloaded successfully. \\
+Input \& Origin & Report generation requests, report data availability
+information, file storage responses, and download status information
+from the report generation and download components. \\
+Outputs and Destination & An appropriate error message is displayed to
+the user, and relevant diagnostic information is recorded where
+applicable. \\
+Requires & Report generation component, report storage or retrieval
+mechanism, database connectivity, and error handling mechanism. \\
+Actions to be taken & 1. Receive an error from the report generation or
+download component. 2. Identify the affected report operation. 3.
+Determine whether the failure occurred during data retrieval, report
+creation, file storage, or file delivery. 4. Record the
+operation\textquotesingle s failure status and relevant diagnostic
+information. 5. Display an appropriate message explaining that the
+report is unavailable or the operation failed. 6. Allow the user to
+retry when appropriate and safe. \\
+Pre-condition & A user has requested a monitoring report to be generated
+or downloaded. \\
+Post-condition & The user is informed of the failure, and the system
+records the relevant operation status where applicable. If the failure
+is resolved and the operation is retried successfully, the report
+becomes available. \\
+Side Effects & Incomplete report files or temporary files may require
+cleanup. A retry may consume additional processing resources. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 31: Handle Database and External Service
+Errors}\label{requirement-36-handle-database-and-external-service-errors}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1645}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8355}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall handle database connectivity
+failures and external service errors that prevent required application
+operations from completing. \\
+Input \& Origin & Database error responses, GEE service errors,
+authentication or access failures, network errors, and other relevant
+service status information. \\
+Outputs and Destination & An appropriate error status is recorded where
+possible, and a user-friendly notification is displayed when the failure
+affects a requested operation. \\
+Requires & Database access component, external service integration
+components, error handling mechanism, and application logging
+facility. \\
+Actions to be taken & 1. Detect a database or external service failure.
+2. Identify the affected operation and service. 3. Record the error
+details when logging or database access remains available. 4. Prevent
+incomplete operations from being reported as successful. 5. Display an
+appropriate message to the user. 6. Retry transient failures only when
+appropriate and safe. 7. Resume or restart the affected operation when
+the service becomes available and the operation can safely continue. \\
+Pre-condition & An application operation requires database access or an
+external service, and the required resource becomes unavailable or
+returns an error. \\
+Post-condition & The failure is handled and communicated appropriately.
+The operation either completes successfully after recovery or remains
+marked as failed or incomplete. \\
+Side Effects & Some operations may be delayed or temporarily
+unavailable. Error logging may be incomplete if the database or logging
+service itself is unavailable. Repeated retries may consume additional
+resources. \\
+\end{longtable}
+
+\subsubsection{Requirement \# 32: Handle Monitoring Operation
+Failures}\label{requirement-22-handle-monitoring-operation-failures}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1645}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8355}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Field} & \textbf{Description} \\
+Function Description & The system shall identify failures that prevent a
+monitoring operation from completing successfully. \\
+Input \& Origin & Error information from GEE requests, image
+preprocessing, computer vision inference, measurement calculation,
+database operations, or other monitoring components. \\
+Outputs and Destination & The system shall display the
+operation\textquotesingle s failure status and details on the user
+interface. \\
+Requires & Monitoring process management component, error handling
+mechanism, database connectivity, and access to operation status
+records. \\
+Actions to be taken & 1. Receive an error reported by a monitoring
+component. 2. Identify the affected monitoring operation.4. Prevent the
+failed operation from being incorrectly marked as successfully
+completed. 5. Display a user-appropriate error message. 6. Preserve
+previously completed monitoring results. 7. Allow a new attempt when the
+cause has been addressed and the operation can safely be retried. \\
+Pre-condition & A monitoring operation has been initiated, and a
+component reports an error or failure. \\
+Post-condition & The failure is communicated appropriately, while
+previously completed results remain available. \\
+Side Effects & Partial processing outputs or temporary files may remain
+and may require cleanup. A retry may consume additional resources or
+external service quota. \\
+\end{longtable}
+
+\subsection{3.4 Behaviour Requirements}\label{behaviour-requirements}
+
+This section contains the interaction and behavioural models associated
+with the requirements above.
+
+\subsubsection{3.4.1 Use Case Diagram}\label{use-case-diagram}
+
+\begin{center}
+    \IfFileExists{Use_Case_Diagram.png}
+    {\includegraphics[width=0.8\textwidth]{Use_Case_Diagram.png}}
+    {\textit{Use Case Diagram image not found.}}
+\end{center}
+
+\subsubsection{3.4.2 Data Flow Diagram --- Level 0}
+\label{data-flow-diagram-level-0}
+
+\begin{center}
+    \IfFileExists{DFD_Level_0.png}
+    {\includegraphics[width=0.8\textwidth]{DFD_Level_0.png}}
+    {\textit{DFD Level 0 image not found.}}
+\end{center}
+
+\subsubsection{3.4.3 Data Flow Diagram --- Level 1}
+\label{data-flow-diagram-level-1}
+
+\begin{center}
+    \IfFileExists{DFD_Level_1.png}
+    {\includegraphics[width=0.8\textwidth]{DFD_Level_1.png}}
+    {\textit{DFD Level 1 image not found.}}
+\end{center}
+
+\subsubsection{3.4.4 Data Flow Diagram --- Level 2: Compare Images}
+\label{data-flow-diagram-level-2-compare-images}
+
+\begin{center}
+    \IfFileExists{DFD_Level_2_Compare_Images.png}
+    {\includegraphics[width=0.8\textwidth]{DFD_Level_2_Compare_Images.png}}
+    {\textit{DFD Level 2: Compare Images diagram not found.}}
+\end{center}
+
+\subsubsection{3.4.5 Sequence Diagram}
+\label{sequence-diagram}
+
+\begin{center}
+    \IfFileExists{Sequence.png}
+    {\includegraphics[width=0.9\textwidth]{Sequence.png}}
+    {\textit{Sequence Diagram image not found.}}
+\end{center}
+
+\section{4. Other Non-Functional Requirements}
+\label{other-non-functional-requirements}
+
+\textbf{5. Non-Functional Requirements (NFRs)}
+
+\subsection{1. Performance and Response
+Time}\label{performance-and-response-time}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1089}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2142}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.6769}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Req ID} & \textbf{Requirement Name} & \textbf{Non-Functional
+Requirement Specification} \\
+NFR-PERF-01 & Dashboard Load Time & The system shall load and display
+registered construction sites within 3 seconds. \\
+NFR-PERF-02 & Image Processing Time & The system shall complete
+satellite image preprocessing and change detection within 120 seconds
+per bounding box for the defined test area, number of image pairs, and
+hardware setup. If processing takes longer, it shall continue in the
+background and show the current status to the user. \\
+NFR-PERF-03 & Report Generation Time & The system shall generate a PDF
+monitoring report within 10 seconds, provided that the required
+monitoring data and images are already available. \\
+NFR-PERF-04 & User Interface Responsiveness & The system shall provide
+visible feedback within 1 seconds when a user performs an action, such
+as selecting a date, entering coordinates, or changing a visualization
+layer. \\
+\end{longtable}
+
+\subsection{2. Accuracy and Quality}\label{accuracy-and-quality}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1057}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2158}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.6784}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Req ID} & \textbf{Requirement Name} & \textbf{Non-Functional
+Requirement Specification} \\
+NFR-ACC-01 & Change Detection Model Quality & The computer vision model
+shall achieve an Intersection over Union (IoU) score of at least 0.50 on
+a separate test dataset containing manually labelled satellite images
+representative of the project\textquotesingle s target imagery. \\
+NFR-ACC-02 & Spatial Resolution & The system shall process selected
+Sentinel-2 bands at their native 10-metre spatial resolution, where
+applicable. It shall not claim that the detected changes provide more
+spatial detail than the source imagery supports. \\
+NFR-ACC-03 & Input Validation & The system shall reject all invalid
+inputs included in the defined validation test cases, including missing
+required fields, coordinates outside valid ranges, incorrect bounding
+boxes, and invalid construction start dates. \\
+\end{longtable}
+
+\subsection{3. Availability and
+Reliability}\label{availability-and-reliability}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1026}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2126}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.6848}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Req ID} & \textbf{Requirement Name} & \textbf{Non-Functional
+Requirement Specification} \\
+NFR-REL-01 & System Availability & The web application and backend API
+shall remain available for at least 95\% of each calendar month,
+excluding scheduled maintenance. \\
+NFR-REL-02 & External Service Error Handling & If Google Earth Engine
+(GEE) or another external service fails, the system shall display an
+appropriate error message within 2 seconds of detecting the failure and
+record the status of the affected operation whenever possible. \\
+\end{longtable}
+
+\phantomsection\label{_rh6k7hor8fco}{}
+
+\subsection{4. Capacity and Scalability}\label{capacity-and-scalability}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1009}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1967}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.7024}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Req ID} & \textbf{Requirement Name} & \textbf{Non-Functional
+Requirement Specification} \\
+NFR-SCA-01 & Construction Site Capacity & The system shall support at
+least 1,000 registered construction sites without requiring changes to
+the database structure. \\
+NFR-SCA-02 & Processed Image Caching & The system shall temporarily
+store eligible processed image outputs for up to 10 days to reduce
+repeated processing and unnecessary requests to external services.
+Cached results shall be updated when their source data or processing
+settings change. \\
+\end{longtable}
+
+\subsection{5. Security and Compliance}\label{security-and-compliance}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1074}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2189}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.6737}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Req ID} & \textbf{Requirement Name} & \textbf{Non-Functional
+Requirement Specification} \\
+NFR-SEC-01 & Session Inactivity Timeout & The system shall automatically
+end an authenticated session after 1 hour of inactivity. The user shall
+log in again to access protected features. \\
+NFR-SEC-02 & Password Length & The system shall require passwords to
+contain at least 8 characters and shall store them using Django's
+password-hashing method instead of storing them as plain text. \\
+\end{longtable}
+
+\section{5. Other Requirements}\label{other-requirements}
+
+No additional requirements beyond those specified in Chapters 2--4 and
+Appendix A have been identified at this stage.
+
+\section{Appendix A --- Data
+Dictionary}\label{appendix-a-data-dictionary}
+
+\textbf{Data Model and Database Specification:}
+
+Data Dictionary
+
+\subsection{1.1 users Table}\label{users-table}
+
+This table stores the account information of registered users.
+
+\begin{quote}
+· \textbf{user\_id} (UUID, Primary Key): A unique identifier assigned to
+each user.
+
+· \textbf{email} (VARCHAR, Unique, Not Null): The user\textquotesingle s
+email address, used for account identification.
+
+· \textbf{password\_hash} (VARCHAR, Not Null): The securely hashed
+password, if password management is handled by the application.
+
+· \textbf{full\_name} (VARCHAR): The full name of the user.
+\end{quote}
+
+\subsection{1.2 construction\_sites
+Table}\label{construction_sites-table}
+
+This table stores the details of construction sites registered for
+monitoring.
+
+\begin{quote}
+· \textbf{construction\_id} (UUID, Primary Key): A unique identifier
+assigned to each construction site.
+
+· \textbf{site\_name} (VARCHAR, Not Null): The name of the construction
+site.
+
+· \textbf{created\_by} (UUID, Foreign Key → users.user\_id): Identifies
+the user who registered the site.
+
+· \textbf{bounding\_boundaries} (JSON) The coordinates pointing to the
+boundaries of the whole construction site.\\
+\textbf{location} (VARCHAR): A general address or description of the
+site\textquotesingle s location.
+
+· \textbf{city} (VARCHAR): The city in which the site is located.
+
+· \textbf{country} (VARCHAR): The country in which the site is located.
+
+· \textbf{area} (DECIMAL): The approximate area of the construction site
+in square metres.
+
+· \textbf{start\_date} (DATE, Not Null): The construction start date
+provided by the user.
+
+· \textbf{is\_completed} (BOOLEAN, Default: False): Indicates whether
+the user has marked the construction project as completed.
+
+· \textbf{end\_date} (DATE, Nullable): The actual completion date, if
+the project has been completed.
+
+· \textbf{is\_public} (BOOLEAN, Default: False): Indicates whether the
+site is publicly viewable.
+
+· \textbf{created\_at} (TIMESTAMP): The date and time when the site
+record was created.
+
+· \textbf{current\_progress} (DECIMAL): Latest calculated overall
+progress (0.00\% to 100.00\%).
+\end{quote}
+
+\subsection{1.3 user\_site Table}\label{user_site-table}
+
+This table links users to construction sites they are permitted to
+access. It supports a many-to-many relationship because a user may
+access multiple sites, and a site may be associated with multiple users.
+
+\begin{quote}
+· \textbf{User\_site\_id} (UUID, Primary Key): A unique identifier for
+the access record.
+
+· \textbf{user\_id} (UUID, Foreign Key → users.user\_id): Identifies the
+user receiving access.
+
+· \textbf{construction\_id} (UUID, Foreign Key →
+construction\_sites.construction\_id): Identifies the construction site.
+
+· \textbf{granted\_at} (TIMESTAMP): The date and time when access was
+granted.
+\end{quote}
+
+\subsection{1.4 site\_access\_request
+Table}\label{site_access_request-table}
+
+This table stores requests from users who want to access private
+construction sites.
+
+\begin{quote}
+· \textbf{request\_id} (UUID, Primary Key): A unique identifier for each
+request.
+
+· \textbf{request\_from\_id} (UUID, Foreign Key → users.user\_id):
+Identifies the user requesting access.
+
+· \textbf{request\_to\_id} (UUID, Foreign Key → users.user\_id):
+Identifies the user receiving the request, usually the
+site\textquotesingle s owner.
+
+· \textbf{construction\_id} (UUID, Foreign Key →
+construction\_sites.construction\_id): Identifies the site for which
+access is requested.
+
+· \textbf{status} (VARCHAR, Default:
+\textquotesingle PENDING\textquotesingle): Indicates whether the request
+is pending, approved, or rejected.
+
+· \textbf{created\_at} (TIMESTAMP): The date and time when the request
+was submitted.
+\end{quote}
+
+\subsection{1.5 progress\_logs Table}\label{progress_logs-table}
+
+This table stores the latest run output for the active site check.
+performed on a construction site. Each record represents a comparison
+between satellite images taken at different times.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{progress\_id} (UUID, Primary Key): A unique identifier for
+  each monitoring operation.
+\item
+  \textbf{construction\_id} (UUID, Foreign Key →
+  construction\_sites.construction\_id): Identifies the construction
+  site being monitored.
+\item
+  \textbf{Baseline\_image\_file\_name} (VARCHAR, Nullable): The filename
+  of the original baseline satellite image stored in Supabase Storage
+  (e.g., construction\_id\_\_baseline\_date.tif).
+\item
+  \textbf{latest\_image\_filename (VARCHAR}, Nullable\textbf{): The
+  filename of the latest satellite image stored in Supabase Storage
+  using the standard format:
+  \textless construction\_id\textgreater\_\_\textless date\_of\_satellite\_image\textgreater.tif
+  (e.g., c123\_456\_\_2026-10-19.tif).}
+\item
+  \textbf{change\_mask\_filename (VARCHAR}, Nullable\textbf{): The
+  filename of the OpenCV-generated visual overlay mask stored in
+  Supabase Storage (e.g., c123\_456\_\_2026-10-19\_mask.tif).}
+\item
+  \textbf{area\_changed\_sqm} (DECIMAL, Nullable): The estimated area of
+  detected change, in square metres.
+\item
+  \textbf{change\_percentage} (DECIMAL, Nullable): The percentage of the
+  monitored site area classified as changed, if calculated by the
+  system.
+\item
+  \textbf{status} (VARCHAR): The current status of the monitoring
+  operation, such as PENDING, PROCESSING, COMPLETED, or FAILED.
+\item
+  \textbf{Satellite\_image\_date} (DATE): Date the satellite image was
+  captured.
+\item
+  \textbf{processed\_at} (TIMESTAMP, Nullable): The date and time when
+  the monitoring operation finished processing.
+\end{enumerate}
+
+\begin{quote}
+·
+\end{quote}
+
+\subsubsection{2. ENTITY RELATIONSHIPS}\label{entity-relationships}
+
+The database tables are connected through primary and foreign keys to
+maintain data consistency and establish relationships between users,
+construction sites, access requests, and monitoring records.
+
+\textbf{1. Users and Construction Sites (One-to-Many, 1)}
+
+One user can register multiple construction sites, while each
+construction site is registered by one user. This relationship is
+established through the created\_by field in the construction\_sites
+table, which references users.user\_id.
+
+\textbf{2. Users and Construction Sites through User\_Site
+(Many-to-Many, M)}
+
+A user can have access to multiple construction sites, and a
+construction site can be accessed by multiple users. This many-to-many
+relationship is managed through the user\_site table, which connects
+users and construction\_sites using user\_id and construction\_id.
+
+\textbf{3. Users and Site Access Requests (One-to-Many, 1)}
+
+A user can submit multiple access requests to view private construction
+sites. This relationship is established through the request\_from\_id
+field in the site\_access\_request table, which references
+users.user\_id.
+
+A user can also receive multiple access requests from other users. This
+relationship is established through the request\_to\_id field, which
+also references users.user\_id.
+
+\textbf{4. Construction Sites and Site Access Requests (One-to-Many, 1)}
+
+A construction site can receive multiple access requests from different
+users. Each access request is associated with one construction site
+through the construction\_id field in the site\_access\_request table,
+which references construction\_sites.construction\_id.
+
+\textbf{5. Construction Sites and Progress Logs (One-to-Many, 1)}
+
+A construction site can have multiple progress logs, with each log
+representing a separate monitoring operation. This relationship is
+established through the construction\_id field in the progress\_logs
+table, which references construction\_sites.construction\_id.
+
+These relationships allow the system to maintain site information,
+manage user access, process access requests, and store the latest
+monitoring result for each construction site.
+
+\section{Appendix B --- Requirements Traceability
+Matrix}\label{appendix-b-requirements-traceability-matrix}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.0641}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2878}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1034}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.3580}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1867}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{UFR ID}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{User Requirement / Summary}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Related SFR ID(s)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Acceptance Criteria / Verification}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Use Case / Model}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+FR1 & Create a user account. & SFR1 & Valid registration details create
+an account and display a confirmation message. & Sign Up \\
+FR2 & Log in using valid credentials. & SFR2 & Valid credentials allow
+login; invalid credentials are rejected. & Login \\
+FR3 & Log out of the account. & SFR3 & Logging out ends the session and
+prevents access to protected pages until login. & Logout \\
+FR4 & Store and retrieve user, site, imagery, and monitoring records. &
+SFR4 & Saved records can be retrieved with their stored information
+intact. & Data Management \\
+FR5 & Maintain monitoring operation records and results. & SFR5 & A
+monitoring operation\textquotesingle s status and available results are
+saved and retrievable. & Compare Images; View Monitoring Results \\
+FR6 & Associate monitoring records with their corresponding sites. &
+SFR6 & Each monitoring record is linked to the correct construction
+site. & View Monitoring Results \\
+FR7 & Compare satellite images captured at different times. & SFR7 &
+Given suitable images of the same site from different dates, the system
+compares them and identifies detectable changes. & Compare Images \\
+FR8 & Generate a change mask highlighting detected areas. & SFR8 & A
+successful change detection operation produces a mask highlighting
+detected changes. & Compare Images \\
+FR9 & Display original satellite images alongside change detection
+results. & SFR9 & The comparison images and corresponding change mask
+are displayed with the correct dates. & View Monitoring Results \\
+FR10 & Analyze detected changes to provide construction insights. &
+SFR10 & Available change detection results are analyzed and produce
+relevant findings. & AI Analysis \\
+FR11 & Summarize detected changes understandably. & SFR11 & The system
+displays a readable summary based on available monitoring results. & AI
+Analysis \\
+FR12 & Present AI-generated observations based on image analysis. &
+SFR12 & AI observations are displayed with supporting monitoring data
+and do not present unsupported conclusions as facts. & AI Analysis \\
+FR13 & Display registered sites and monitoring status on a dashboard. &
+SFR13 & The dashboard displays the user\textquotesingle s accessible
+sites and their available monitoring statuses. & View Dashboard \\
+FR14 & Display satellite images, detected changes, and measurements. &
+SFR14 & Available images, detected changes, and calculated measurements
+are displayed for the selected monitoring result. & View Monitoring
+Results \\
+FR15 & Present monitoring results through visual overlays. & SFR15 & The
+system overlays the generated change mask on the corresponding satellite
+imagery. & View Monitoring Results \\
+FR16 & Register a site with its name, coordinates, and construction
+start date. & SFR16 & Valid site details are saved, and the system
+confirms successful registration. & Register Construction Site \\
+FR17 & Validate coordinates and show the location for confirmation. &
+SFR17 & Valid coordinates show the selected location; invalid
+coordinates are rejected with a message. & Register Construction Site \\
+FR18 & View registered construction site details. & SFR18 & Selecting a
+site displays its saved details correctly. & View Construction Site \\
+FR19 & Request access using a unique site identifier. & SFR19 & A user
+without access can submit a request for an existing site; duplicate
+pending requests are rejected. & Request to Join Construction Site \\
+FR20 & Allow the site creator to approve or reject access requests. &
+SFR20 & The creator can approve or reject a pending request; only
+approval grants access. & Manage Site Access Requests \\
+FR21 & View calculated change measurements over time. & SFR21 & The
+system displays available measurements with their corresponding dates
+and units. & View Monitoring Results \\
+FR22 & Compare monitoring results from different dates. & SFR22 &
+Selecting different monitoring dates displays the corresponding results
+for comparison. & Compare Images; View Monitoring Results \\
+FR23 & View measurements from the latest satellite comparison. & SFR23 &
+The latest successfully completed comparison\textquotesingle s
+measurements are displayed for the selected site. & View Monitoring
+Results \\
+FR24 & Generate a report for a selected site and time period. & SFR24 &
+Selecting a site and a valid period with available results produces a
+report. & Report Generation \\
+FR25 & Include images, change detection results, and measurements in
+reports. & SFR25 & The report includes relevant available imagery,
+change detection results, measurements, and dates. & Report
+Generation \\
+FR26 & Download generated monitoring reports. & SFR26 & The user can
+download and open a successfully generated report. & Report
+Generation \\
+FR27 & Notify users when suitable satellite imagery is unavailable. &
+SFR27 & If no suitable imagery exists for the selected site or period,
+the system displays a notification. & Compare Images \\
+FR28 & Inform users when monitoring cannot proceed because of a
+processing or service error. & SFR28 & When a required service or
+processing component fails, the system displays an appropriate error
+message. & Compare Images; Error Handling \\
+FR29 & Notify users when site information is invalid or incomplete. &
+SFR29 & Missing required fields or invalid site information prevent
+registration and produce a validation message. & Register Construction
+Site \\
+FR30 & Display an error message when monitoring fails. & SFR30 & A
+failed monitoring operation is marked as unsuccessful, the user is
+informed, and previously completed results remain available. & Compare
+Images; Error Handling \\
+\end{longtable}
+
+\end{document}
